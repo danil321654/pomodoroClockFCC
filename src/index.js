@@ -1,45 +1,76 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
+import {createStore} from "redux";
+import {Provider, connect} from "react-redux";
 
-const render = (min,sec) => {
-  if(sec.toString().length == 1) sec = '0'+sec;
-ReactDOM.render(
-<div>
-  <PomodoroClock sec={sec} min={min}/>,
-</div>,
-document.getElementById("root")
-);
+const timer = (state = {min: "25", sec: "00", defaultmin: "25"}, action) => {
+  let state1 = state;
+  switch (action.type) {
+    case "START":
+      console.log(state1);
+      if (state1.sec == 0)
+        Object.assign(state1, {min: state1.min - 1, sec: "59"});
+      else Object.assign(state1, {sec: state1.sec - 1});
+      return state1;
+    case "RESET":
+        Object.assign(state1, {min: state1.defaultmin, sec: "00"});
+        return state1;
+  }
 
-setTimeout(timer,1000,min,sec);}
-
-function timer  (min, sec)  {
-
-  if(sec==0){ sec = 60;min--;}
-  sec--;
-  console.log(min,sec);
-  render(min,sec);
-}
+  /*
+  if (action.type == "START") {
+    if (state1.sec == 0)
+      Object.assign(state1, {min: state1.min - 1, sec: "60", paused: false});
+  }
+  if (action.type == "PAUSE") Object.assign(state1, {paused: true});
+  console.log(state1);
+  if (state1.sec.length == 1) Object.assign(state1, {sec: "0" + state1.sec});
+  if (!state1.paused) Object.assign(state, {sec: state.sec - 1});*/
+  return state1;
+};
+const store = createStore(timer);
+var intervalID;
 class PomodoroClock extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-      secLength: 25,
-      curBreakLength: 5,
-      breakLength: 500,
-      last: "RESET"
+      pause: true
     };
     this.handleClick = this.handleClick.bind(this);
   }
-  handleClick(event){
-    console.log('sad');
-    timer(
-      this.props.min,
-      this.props.sec);
+  handleClick(event) {
+    switch (event.currentTarget.value) {
+      case "STARTSTOP":
+        if (this.state.pause) {
+          store.dispatch({
+            id: "",
+            type: "START"
+          });
+          intervalID = setInterval(store.dispatch, 1000, {
+            id: "",
+            type: "START"
+          });
+        } else {
+          clearInterval(intervalID);
+        }
+
+        this.setState({pause: !this.state.pause});
+        break;
+      case "RESET":
+        clearInterval(intervalID);
+        store.dispatch({
+          id: "",
+          type: "RESET"
+        });
+      default:
+        break;
+    }
   }
-  componentWillUpdate(){
-    console.log("update");
+  componentWillMount() {
+    console.log(this.props);
   }
+
   render() {
     return (
       <div className="PomodoroClock">
@@ -72,14 +103,25 @@ class PomodoroClock extends React.Component {
         </div>
         <div className="session">
           <div>Session</div>
-          <div className="timer">{
-            this.props.min}:{this.props.sec}</div>
-          <div >
-            <button className="button" onClick={this.handleClick} value="STARTSTOP"><div >
-              <i class="fa fa-play fa-play" aria-hidden="true" ></i>
-              <i class="fa fa-play fa-pause" aria-hidden="true"></i></div>
+          <div className="timer">
+            {this.props.min}:{this.props.sec}
+          </div>
+          <div>
+            <button
+              className="button"
+              onClick={this.handleClick}
+              value="STARTSTOP"
+            >
+              <div>
+                <i class="fa fa-play fa-play" aria-hidden="true"></i>
+                <i class="fa fa-play fa-pause" aria-hidden="true"></i>
+              </div>
             </button>
-            <button className="button">
+            <button
+              className="button"
+              onClick={this.handleClick}
+              value="RESET"
+            >
               <i class="fa fa-repeat" aria-hidden="true"></i>
             </button>
           </div>
@@ -89,9 +131,17 @@ class PomodoroClock extends React.Component {
   }
 }
 
-ReactDOM.render(
-<div>
-    <PomodoroClock sec="00" min="25"/>,
-</div>,
-  document.getElementById("root")
-);
+const render = () => {
+  ReactDOM.render(
+    <div>
+      <PomodoroClock
+        sec={store.getState().sec}
+        min={store.getState().min}
+        paused={store.getState().paused}
+      />
+    </div>,
+    document.getElementById("root")
+  );
+};
+render();
+store.subscribe(render);

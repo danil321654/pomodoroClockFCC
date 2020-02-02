@@ -1,23 +1,17 @@
 import React from "react";
 
 class PomodoroClock extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.handleClick = this.handleClick.bind(this);
   }
-  handleClick(event){
-    this.props.updateScr({type: "STARTSTOP"});
+  handleClick(event) {
+    console.log("sad");
+    this.props.updateScr({id: '', type:'START'});
   }
-  componentDidMount(){
-
-  }
-  componentDidUpdate(){
-    setTimeout( () => {
-      this.props.curSesLengthSec--;
-      if (this.props.curSesLengthSec == 59)
-        this.props.curSesLengthMin--;
-
-    },1000)
+  componentWillUpdate() {
+    console.log("update");
+    console.log(this.props);
   }
   render() {
     return (
@@ -51,11 +45,19 @@ class PomodoroClock extends React.Component {
         </div>
         <div className="session">
           <div>Session</div>
-          <div className="timer">{this.props.curSesLengthMin}:{this.props.curSesLengthSec}</div>
-          <div >
-            <button className="button" onClick={this.handleClick} value="STARTSTOP"><div >
-              <i class="fa fa-play fa-play" aria-hidden="true" ></i>
-              <i class="fa fa-play fa-pause" aria-hidden="true"></i></div>
+          <div className="timer">
+            {this.props.min}:{this.props.sec}
+          </div>
+          <div>
+            <button
+              className="button"
+              onClick={this.handleClick}
+              value="STARTSTOP"
+            >
+              <div>
+                <i class="fa fa-play fa-play" aria-hidden="true"></i>
+                <i class="fa fa-play fa-pause" aria-hidden="true"></i>
+              </div>
             </button>
             <button className="button">
               <i class="fa fa-repeat" aria-hidden="true"></i>
