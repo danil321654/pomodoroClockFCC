@@ -1,5 +1,6 @@
 @import url("https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
 @import "https://fonts.googleapis.com/css?family=Share+Tech+Mono";
+@import url("https://fonts.googleapis.com/css?family=Righteous&display=swap");
 @font-face {
   font-family: "Digital";
   src: url("//db.onlinewebfonts.com/t/8e22783d707ad140bffe18b2a3812529.eot");
@@ -39,7 +40,8 @@ body {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  min-height: 100vh; }
+  min-height: 100vh;
+  font-family: 'Righteous', cursive; }
 
 #root {
   -ms-flex-line-pack: center;
@@ -48,38 +50,55 @@ body {
   height: 40vw; }
 
 .PomodoroClock {
-  font-size: 1.5rem;
+  font-size: 3vw;
   font-weight: bold;
   text-align: center;
   -ms-flex-pack: distribute;
       justify-content: space-around;
   width: 50vw;
-  min-width: 300px;
-  min-height: 350px;
+  min-width: 500px;
+  min-height: 450px;
   height: 40vw;
   color: white;
+  padding: 20px;
   border: 3px solid white;
   border-radius: 15%; }
   .PomodoroClock .lengthControls {
-    font-size: 1.3rem;
+    font-size: 2vw;
     width: 100%; }
     .PomodoroClock .lengthControls .controlBlock {
       width: -webkit-max-content;
       width: -moz-max-content;
       width: max-content; }
+  .PomodoroClock .invis {
+    visibility: hidden;
+    color: transparent;
+    width: 0px;
+    height: 0px;
+    margin: 0;
+    padding: 0; }
   .PomodoroClock .session {
     border: 3px solid white;
     width: 40%;
-    padding: 0.2rem;
-    height: 5.5rem;
-    border-radius: 40%; }
+    padding: 30px;
+    font-size: 60px;
+    border-radius: 50%; }
     .PomodoroClock .session .timer {
-      font-family: Digital; }
+      font-family: Digital;
+      font-size: 50px; }
   .PomodoroClock .button {
     border: none;
     outline: none;
     background: transparent;
     color: white;
+    font-size: 2rem; }
+  .PomodoroClock .arrow {
     font-size: 1.2rem; }
+
+@media (max-width: 1000px) {
+  .PomodoroClock {
+    font-size: 30px; }
+    .PomodoroClock .lengthControls {
+      font-size: 20px; } }
 
 /*# sourceMappingURL=index.css.map */
